@@ -2,7 +2,6 @@
     <string name="app_name">TipTip</string>
     <string name="tip_amount">Tip Amount</string>
 
-    <!-- TODO: bind % to percentage of tip -->
     <string name="percentage_of_tip">Percentage of Tip</string>
     <string name="number_of_people">Number of People</string>
     <string name="bill">Amount of Bill</string>
