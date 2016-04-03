@@ -58,8 +58,7 @@ public class TipCalcFragment extends Fragment {
         calcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CalcCore calcCore = new CalcCore();
-                calcCore.execute(bill, percentage_of_tip, (double) number_of_people);
+                calculate();
             }
         });
 
@@ -78,8 +77,10 @@ public class TipCalcFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0)
+                if (s.length() > 0) {
                     bill = Double.valueOf(s.toString());
+                    calculate();
+                }
             }
         });
         et_bill.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -108,8 +109,10 @@ public class TipCalcFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0 && s.charAt(s.length()-1) != '%')
+                if (s.length() > 0 && s.charAt(s.length()-1) != '%') {
                     percentage_of_tip = Double.valueOf(s.toString()) / 100;
+                    calculate();
+                }
             }
         });
         et_percentage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -138,8 +141,10 @@ public class TipCalcFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>0)
+                if (s.length()>0) {
                     number_of_people = Integer.valueOf(s.toString());
+                    calculate();
+                }
             }
         });
         et_number_of_people.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -159,6 +164,7 @@ public class TipCalcFragment extends Fragment {
             public void onClick(View v) {
                 percentage_of_tip += 0.005;
                 et_percentage.setText(format2(percentage_of_tip * 100) + "%");
+                calculate();
             }
         });
 
@@ -168,13 +174,20 @@ public class TipCalcFragment extends Fragment {
             public void onClick(View v) {
                 percentage_of_tip -= 0.005;
                 et_percentage.setText(format2(percentage_of_tip * 100) + "%");
+                calculate();
             }
         });
 
+        calculate();
         return view;
     }
 
     String format2(double price) {
         return new DecimalFormat("#.00").format(price);
+    }
+
+    void calculate(){
+        CalcCore calcCore = new CalcCore();
+        calcCore.execute(bill, percentage_of_tip, (double) number_of_people);
     }
 }
