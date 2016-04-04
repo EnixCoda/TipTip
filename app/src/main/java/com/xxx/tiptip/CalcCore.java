@@ -9,8 +9,8 @@ public class CalcCore {
 
     public static double tipAmount, totalAmount, amountPerPerson;
     public static double bill = DEFAULT_BILL,
-                  percentageOfTip = DEFAULT_PERCENTAGE_OF_TIP;
-    public static int numberOfPeople = DEFAULT_NUMBER_OF_PEOPLE;
+                         percentageOfTip = DEFAULT_PERCENTAGE_OF_TIP;
+    public static int    numberOfPeople = DEFAULT_NUMBER_OF_PEOPLE;
 
     public static class Calc extends AsyncTask<Void, Void, Void> {
         @Override

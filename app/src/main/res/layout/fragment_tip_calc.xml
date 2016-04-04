@@ -95,7 +95,7 @@
                         android:layout_width="42dp"
                         android:layout_height="42dp"
                         android:text="@string/minus"
-                        android:id="@+id/btn_minus"
+                        android:id="@+id/btn_tip_minus"
                         android:textSize="18sp"
                         android:layout_gravity="top"
                         android:background="@android:color/transparent"/>
@@ -117,7 +117,7 @@
                         android:layout_height="42dp"
                         android:text="@string/plus"
                         android:background="@android:color/transparent"
-                        android:id="@+id/btn_plus"
+                        android:id="@+id/btn_tip_plus"
                         android:textSize="18sp"
                         android:layout_gravity="top"
                         />
@@ -149,16 +149,27 @@
                         android:fontFamily="sans-serif-condensed"/>
                 </FrameLayout>
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:paddingLeft="16dp"
+                    android:orientation="horizontal"
                     >
 
+                    <Button
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:text="@string/minus"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/btn_people_minus"
+                        android:textSize="18sp"
+                        android:layout_gravity="top"/>
+
                     <EditText
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:id="@+id/edittext_number_of_people"
                         android:layout_gravity="center"
                         android:inputType="number"
@@ -166,7 +177,16 @@
                         android:fontFamily="sans-serif-condensed"
                         android:textSize="32sp"
                         />
-                </FrameLayout>
+
+                    <Button
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:text="@string/plus"
+                        android:id="@+id/btn_people_plus"
+                        android:textSize="18sp"
+                        android:layout_gravity="top"
+                        android:background="@android:color/transparent"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

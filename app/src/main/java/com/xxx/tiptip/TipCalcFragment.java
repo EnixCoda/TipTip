@@ -78,13 +78,15 @@ public class TipCalcFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0 && s.charAt(s.length()-1) != '%') {
+                if (s.length() > 0 && s.charAt(s.length() - 1) != '%') {
                     CalcCore.percentageOfTip = Double.valueOf(s.toString()) / 100;
                     calculate();
                 }
@@ -107,13 +109,15 @@ public class TipCalcFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>0) {
+                if (s.length() > 0) {
                     CalcCore.numberOfPeople = Integer.valueOf(s.toString());
                     calculate();
                 }
@@ -130,23 +134,49 @@ public class TipCalcFragment extends Fragment {
             }
         });
 
-        viewHolder.btnPlus.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnTipPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CalcCore.percentageOfTip += 0.005;
-                viewHolder.et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
+                if (viewHolder.et_percentage.hasFocus())
+                    viewHolder.et_percentage.setText(String.format("%.2f", CalcCore.percentageOfTip * 100));
+                else
+                    viewHolder.et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
                 calculate();
             }
         });
 
-        viewHolder.btnMinus.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnTipMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CalcCore.percentageOfTip -= 0.005;
-                viewHolder.et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
+                if (viewHolder.et_percentage.hasFocus())
+                    viewHolder.et_percentage.setText(String.format("%.2f", CalcCore.percentageOfTip * 100));
+                else
+                    viewHolder.et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
                 calculate();
             }
         });
+
+        viewHolder.btnPeoplePlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalcCore.numberOfPeople += 1;
+                viewHolder.et_number_of_people.setText(String.format("%d", CalcCore.numberOfPeople));
+                calculate();
+            }
+        });
+
+        viewHolder.btnPeopleMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalcCore.numberOfPeople -= 1;
+                viewHolder.et_number_of_people.setText(String.format("%d", CalcCore.numberOfPeople));
+                calculate();
+            }
+        });
+
+        calculate();
 
         return view;
     }
@@ -159,7 +189,7 @@ public class TipCalcFragment extends Fragment {
         return String.format("%.2f", percentage * 100) + "%";
     }
 
-    static void calculate(){
+    static void calculate() {
         CalcCore.Calc calc = new CalcCore.Calc();
         calc.execute();
     }
@@ -167,7 +197,8 @@ public class TipCalcFragment extends Fragment {
     private static class ViewHolder {
         public TextView tv_TipAmount, tv_TotalAmount, tv_AmountPerPerson;
         public EditText et_bill, et_percentage, et_number_of_people;
-        public Button calcBtn, btnPlus, btnMinus;
+        public Button btnTipPlus, btnTipMinus, btnPeoplePlus, btnPeopleMinus;
+
         ViewHolder(View view) {
             tv_TipAmount = (TextView) view.findViewById(R.id.textview_tip_value);
             tv_TotalAmount = (TextView) view.findViewById(R.id.textview_total_amount_value);
@@ -175,9 +206,10 @@ public class TipCalcFragment extends Fragment {
             et_bill = (EditText) view.findViewById(R.id.edittext_bill);
             et_percentage = (EditText) view.findViewById(R.id.edittext_percentage_of_tip);
             et_number_of_people = (EditText) view.findViewById(R.id.edittext_number_of_people);
-            btnPlus = (Button) view.findViewById(R.id.btn_plus);
-            btnMinus = (Button) view.findViewById(R.id.btn_minus);
-            calcBtn = (Button) view.findViewById(R.id.btn_calculate);
+            btnTipPlus = (Button) view.findViewById(R.id.btn_tip_plus);
+            btnTipMinus = (Button) view.findViewById(R.id.btn_tip_minus);
+            btnPeoplePlus = (Button) view.findViewById(R.id.btn_people_plus);
+            btnPeopleMinus = (Button) view.findViewById(R.id.btn_people_minus);
         }
     }
 }
