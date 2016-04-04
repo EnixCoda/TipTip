@@ -2,28 +2,29 @@ package com.xxx.tiptip;
 
 import android.os.AsyncTask;
 
-public class CalcCore extends AsyncTask<Double, Void, Void>{
+public class CalcCore {
 
-    @Override
-    protected Void doInBackground(Double... params) {
-        if (params.length == 3) {
-            double bill = params[0],
-                    percentageOfTip = params[1],
-                    numberOfPeople = params[2];
-            double
-                    tipAmount = percentageOfTip * bill,
-                    totalAmount = tipAmount + bill,
-                    amountPerPerson = totalAmount / numberOfPeople;
-            TipCalcFragment.tipAmount = tipAmount;
-            TipCalcFragment.totalAmount = totalAmount;
-            TipCalcFragment.amountPerPerson = amountPerPerson;
+    private static final double DEFAULT_BILL = 0, DEFAULT_PERCENTAGE_OF_TIP = 0.15;
+    private static final int DEFAULT_NUMBER_OF_PEOPLE = 1;
+
+    public static double tipAmount, totalAmount, amountPerPerson;
+    public static double bill = DEFAULT_BILL,
+                  percentageOfTip = DEFAULT_PERCENTAGE_OF_TIP;
+    public static int numberOfPeople = DEFAULT_NUMBER_OF_PEOPLE;
+
+    public static class Calc extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            tipAmount = percentageOfTip * bill;
+            totalAmount = tipAmount + bill;
+            amountPerPerson = totalAmount / numberOfPeople;
+            return null;
         }
-        return null;
-    }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        TipCalcFragment.updateView();
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            TipCalcFragment.updateView();
+        }
     }
 }

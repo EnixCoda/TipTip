@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">TipTip</string>
     <string name="tip_amount">Tip Amount</string>
 
@@ -14,4 +14,5 @@
     <string name="percent">%</string>
     <string name="calculate">Calculate</string>
 
+    <string name="percent_format"><xliff:g id="percent">%.2f</xliff:g>%</string>
 </resources>
