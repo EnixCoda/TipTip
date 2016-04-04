@@ -17,10 +17,9 @@ import java.text.DecimalFormat;
 
 public class TipCalcFragment extends Fragment {
 
-    private static ViewHolder viewHolder;
+    static ViewHolder viewHolder;
 
-    public TipCalcFragment() {
-    }
+    public TipCalcFragment() {}
 
     public static void updateView() {
         viewHolder.tv_TipAmount.setText(format2digit(CalcCore.tipAmount));
@@ -31,6 +30,8 @@ public class TipCalcFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //auto open soft keyboard
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
@@ -42,6 +43,9 @@ public class TipCalcFragment extends Fragment {
         viewHolder = new ViewHolder(view);
 
         viewHolder.et_bill.setText(format2digit(CalcCore.bill));
+        viewHolder.et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
+        viewHolder.et_number_of_people.setText(String.format("%d", CalcCore.numberOfPeople));
+
         viewHolder.et_bill.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -72,7 +76,6 @@ public class TipCalcFragment extends Fragment {
             }
         });
 
-        viewHolder.et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
         viewHolder.et_percentage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -86,7 +89,7 @@ public class TipCalcFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0 && s.charAt(s.length() - 1) != '%') {
+                if (s.length() > 0) {
                     CalcCore.percentageOfTip = Double.valueOf(s.toString()) / 100;
                     calculate();
                 }
@@ -103,7 +106,6 @@ public class TipCalcFragment extends Fragment {
             }
         });
 
-        viewHolder.et_number_of_people.setText(String.format("%d", CalcCore.numberOfPeople));
         viewHolder.et_number_of_people.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -149,7 +151,7 @@ public class TipCalcFragment extends Fragment {
         viewHolder.btnTipMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CalcCore.percentageOfTip -= 0.005;
+                CalcCore.percentageOfTip =Math.max(CalcCore.percentageOfTip - 0.005, 0);
                 if (viewHolder.et_percentage.hasFocus())
                     viewHolder.et_percentage.setText(String.format("%.2f", CalcCore.percentageOfTip * 100));
                 else
@@ -170,7 +172,7 @@ public class TipCalcFragment extends Fragment {
         viewHolder.btnPeopleMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CalcCore.numberOfPeople -= 1;
+                CalcCore.numberOfPeople = Math.max(CalcCore.numberOfPeople - 1, 1);
                 viewHolder.et_number_of_people.setText(String.format("%d", CalcCore.numberOfPeople));
                 calculate();
             }
@@ -186,7 +188,7 @@ public class TipCalcFragment extends Fragment {
     }
 
     static String formatPercentage(double percentage) {
-        return String.format("%.2f", percentage * 100) + "%";
+        return String.format("%.2f", percentage * 100);
     }
 
     static void calculate() {

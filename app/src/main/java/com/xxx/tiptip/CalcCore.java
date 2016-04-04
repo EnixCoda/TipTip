@@ -4,8 +4,8 @@ import android.os.AsyncTask;
 
 public class CalcCore {
 
-    private static final double DEFAULT_BILL = 0, DEFAULT_PERCENTAGE_OF_TIP = 0.15;
-    private static final int DEFAULT_NUMBER_OF_PEOPLE = 1;
+    static final double DEFAULT_BILL = 0, DEFAULT_PERCENTAGE_OF_TIP = 0.15;
+    static final int DEFAULT_NUMBER_OF_PEOPLE = 1;
 
     public static double tipAmount, totalAmount, amountPerPerson;
     public static double bill = DEFAULT_BILL,

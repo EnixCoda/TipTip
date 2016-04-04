@@ -105,11 +105,21 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edittext_percentage_of_tip"
                         android:layout_gravity="center"
-                        android:textAlignment="center"
+                        android:textAlignment="viewEnd"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-condensed"
                         android:textSize="32sp"
-                        android:inputType="numberDecimal"/>
+                        android:inputType="numberDecimal"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/percent"
+                        android:id="@+id/textView"
+                        android:textSize="32sp"
+                        android:layout_gravity="center_vertical"/>
 
                     <Button
                         style="?android:attr/buttonStyleSmall"
