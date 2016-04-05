@@ -1,5 +1,7 @@
 package com.xxx.tiptip;
 
+import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -64,6 +66,11 @@ public class TipCalcFragment extends Fragment {
             btnTipMinus = (Button) view.findViewById(R.id.btn_tip_minus);
             btnPeoplePlus = (Button) view.findViewById(R.id.btn_people_plus);
             btnPeopleMinus = (Button) view.findViewById(R.id.btn_people_minus);
+
+//            btnTipPlus.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+
+            //TODO: custom button color for enabled & disabled
+            //TODO: custom button shape, like circle
 
             //init EditTexts with default values
             et_bill.setText(format2digit(CalcCore.bill));

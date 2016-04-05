@@ -9,8 +9,8 @@
     <string name="total_amount">Total Amount</string>
     <string name="amount_per_person">Amount per Person</string>
 
-    <string name="plus">+</string>
-    <string name="minus">-</string>
+    <string name="plus">＋</string>
+    <string name="minus">－</string>
     <string name="percent">%</string>
     <string name="calculate">Calculate</string>
 
