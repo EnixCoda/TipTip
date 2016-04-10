@@ -119,9 +119,7 @@ public class TipCalcFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
-                        Log.v("pot before divide", format2digit(CalcCore.percentageOfTip));
                         CalcCore.percentageOfTip = new BigDecimal(s.toString()).multiply(new BigDecimal(0.01));
-                        Log.v("pot after divide", format2digit(CalcCore.percentageOfTip));
                         calculate();
                     }
                 }
@@ -168,9 +166,7 @@ public class TipCalcFragment extends Fragment {
             btnTipPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v("pot before add", format2digit(CalcCore.percentageOfTip));
                     CalcCore.percentageOfTip = CalcCore.percentageOfTip.add(new BigDecimal(0.005));
-                    Log.v("pot after add", format2digit(CalcCore.percentageOfTip));
                     et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
                 }
             });
@@ -179,9 +175,7 @@ public class TipCalcFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (CalcCore.percentageOfTip.subtract(new BigDecimal(0.005)).compareTo(new BigDecimal(0)) >= 0) {
-                    Log.v("pot before minus", format2digit(CalcCore.percentageOfTip));
                         CalcCore.percentageOfTip = CalcCore.percentageOfTip.subtract(new BigDecimal(0.005));
-                    Log.v("pot after minus", format2digit(CalcCore.percentageOfTip));
                     } else {
                         CalcCore.percentageOfTip = new BigDecimal(0);
                     }
