@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class TipCalcFragment extends Fragment {
@@ -36,13 +37,12 @@ public class TipCalcFragment extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tip_calc, container, false);
-        viewHolder = new ViewHolder(view);
+        View rootView = inflater.inflate(R.layout.fragment_tip_calc, container, false);
+        viewHolder = new ViewHolder(rootView);
         calculate();
-        return view;
+        return rootView;
     }
 
     void calculate() {
@@ -89,7 +89,7 @@ public class TipCalcFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
-                        CalcCore.bill = Double.valueOf(s.toString());
+                        CalcCore.bill = new BigDecimal(s.toString());
                         calculate();
                     }
                 }
@@ -117,7 +117,7 @@ public class TipCalcFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
-                        CalcCore.percentageOfTip = Double.valueOf(s.toString()) / 100;
+                        CalcCore.percentageOfTip = new BigDecimal(s.toString()).divide(new BigDecimal(100), BigDecimal.ROUND_UP);
                         calculate();
                     }
                 }
@@ -145,7 +145,7 @@ public class TipCalcFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
-                        CalcCore.numberOfPeople = Integer.valueOf(s.toString());
+                        CalcCore.numberOfPeople = new BigDecimal(s.toString());
                         calculate();
                     }
                 }
@@ -164,7 +164,7 @@ public class TipCalcFragment extends Fragment {
             btnTipPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CalcCore.percentageOfTip += 0.005;
+                    CalcCore.percentageOfTip = CalcCore.percentageOfTip.add(new BigDecimal(0.005));
                     et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
                     calculate();
                 }
@@ -173,7 +173,11 @@ public class TipCalcFragment extends Fragment {
             btnTipMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CalcCore.percentageOfTip = Math.max(CalcCore.percentageOfTip - 0.005, 0);
+                    if (CalcCore.percentageOfTip.subtract(new BigDecimal(0.005)).compareTo(new BigDecimal(0)) > 0) {
+                        CalcCore.percentageOfTip = CalcCore.percentageOfTip.subtract(new BigDecimal(0.005));
+                    } else {
+                        CalcCore.percentageOfTip = new BigDecimal(0);
+                    }
                     et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
                     calculate();
                 }
@@ -182,7 +186,7 @@ public class TipCalcFragment extends Fragment {
             btnPeoplePlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CalcCore.numberOfPeople += 1;
+                    CalcCore.numberOfPeople = CalcCore.numberOfPeople.add(new BigDecimal(1));
                     et_number_of_people.setText(formatInteger(CalcCore.numberOfPeople));
                     calculate();
                 }
@@ -191,23 +195,27 @@ public class TipCalcFragment extends Fragment {
             btnPeopleMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CalcCore.numberOfPeople = Math.max(CalcCore.numberOfPeople - 1, 1);
+                    if (CalcCore.numberOfPeople.subtract(new BigDecimal(1)).compareTo(new BigDecimal(1)) > 0) {
+                        CalcCore.numberOfPeople = CalcCore.numberOfPeople.subtract(new BigDecimal(1));
+                    } else {
+                        CalcCore.numberOfPeople = new BigDecimal(0);
+                    }
                     et_number_of_people.setText(formatInteger(CalcCore.numberOfPeople));
                     calculate();
                 }
             });
         }
 
-        String format2digit(double price) {
-            return String.format("%.2f", price);
+        String format2digit(BigDecimal price) {
+            return price.setScale(2, BigDecimal.ROUND_UP).toPlainString();
         }
 
-        String formatPercentage(double percentage) {
-            return String.format("%.1f", percentage * 100);
+        String formatPercentage(BigDecimal percentage) {
+            return percentage.multiply(new BigDecimal(100)).setScale(1, BigDecimal.ROUND_UP).toPlainString();
         }
 
-        String formatInteger(int i) {
-            return String.format("%d", i);
+        String formatInteger(BigDecimal i) {
+            return i.setScale(0, BigDecimal.ROUND_UP).toPlainString();
         }
 
         public void updateView() {

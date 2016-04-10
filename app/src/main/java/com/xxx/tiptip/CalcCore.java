@@ -2,22 +2,24 @@ package com.xxx.tiptip;
 
 import android.os.AsyncTask;
 
+import java.math.BigDecimal;
+
 public class CalcCore {
 
-    static final double DEFAULT_BILL = 0, DEFAULT_PERCENTAGE_OF_TIP = 0.15;
-    static final int DEFAULT_NUMBER_OF_PEOPLE = 1;
+    private static final BigDecimal DEFAULT_BILL = new BigDecimal(0), DEFAULT_PERCENTAGE_OF_TIP = new BigDecimal(0.15);
+    private static final BigDecimal DEFAULT_NUMBER_OF_PEOPLE =  new BigDecimal(1);
 
-    public static double tipAmount, totalAmount, amountPerPerson;
-    public static double bill = DEFAULT_BILL,
+    public static BigDecimal tipAmount, totalAmount, amountPerPerson;
+    public static BigDecimal bill = DEFAULT_BILL,
                          percentageOfTip = DEFAULT_PERCENTAGE_OF_TIP;
-    public static int    numberOfPeople = DEFAULT_NUMBER_OF_PEOPLE;
+    public static BigDecimal    numberOfPeople = DEFAULT_NUMBER_OF_PEOPLE;
 
     public static class Calc extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            tipAmount = percentageOfTip * bill;
-            totalAmount = tipAmount + bill;
-            amountPerPerson = totalAmount / numberOfPeople;
+            tipAmount = percentageOfTip.multiply(bill);
+            totalAmount = tipAmount.add(bill);
+            amountPerPerson = totalAmount.divide(numberOfPeople, BigDecimal.ROUND_UP);
             return null;
         }
 
