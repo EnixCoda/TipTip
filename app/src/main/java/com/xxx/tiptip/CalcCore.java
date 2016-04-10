@@ -10,9 +10,8 @@ public class CalcCore {
     private static final BigDecimal DEFAULT_NUMBER_OF_PEOPLE =  new BigDecimal(1);
 
     public static BigDecimal tipAmount, totalAmount, amountPerPerson;
-    public static BigDecimal bill = DEFAULT_BILL,
-                         percentageOfTip = DEFAULT_PERCENTAGE_OF_TIP;
-    public static BigDecimal    numberOfPeople = DEFAULT_NUMBER_OF_PEOPLE;
+    public static BigDecimal bill = DEFAULT_BILL, percentageOfTip = DEFAULT_PERCENTAGE_OF_TIP;
+    public static BigDecimal numberOfPeople = DEFAULT_NUMBER_OF_PEOPLE;
 
     public static class Calc extends AsyncTask<Void, Void, Void> {
         @Override

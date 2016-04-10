@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 
 public class TipCalcFragment extends Fragment {
@@ -41,7 +43,6 @@ public class TipCalcFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tip_calc, container, false);
         viewHolder = new ViewHolder(rootView);
-        calculate();
         return rootView;
     }
 
@@ -67,7 +68,8 @@ public class TipCalcFragment extends Fragment {
             btnPeoplePlus = (Button) view.findViewById(R.id.btn_people_plus);
             btnPeopleMinus = (Button) view.findViewById(R.id.btn_people_minus);
 
-//            btnTipPlus.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+//            btnTipPlus.getBackground().setColorFilter(getResources()
+//                    .getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
 
             //TODO: custom button color for enabled & disabled
             //TODO: custom button shape, like circle
@@ -117,7 +119,9 @@ public class TipCalcFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
-                        CalcCore.percentageOfTip = new BigDecimal(s.toString()).divide(new BigDecimal(100), BigDecimal.ROUND_UP);
+                        Log.v("pot before divide", format2digit(CalcCore.percentageOfTip));
+                        CalcCore.percentageOfTip = new BigDecimal(s.toString()).multiply(new BigDecimal(0.01));
+                        Log.v("pot after divide", format2digit(CalcCore.percentageOfTip));
                         calculate();
                     }
                 }
@@ -164,22 +168,24 @@ public class TipCalcFragment extends Fragment {
             btnTipPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.v("pot before add", format2digit(CalcCore.percentageOfTip));
                     CalcCore.percentageOfTip = CalcCore.percentageOfTip.add(new BigDecimal(0.005));
+                    Log.v("pot after add", format2digit(CalcCore.percentageOfTip));
                     et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
-                    calculate();
                 }
             });
 
             btnTipMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (CalcCore.percentageOfTip.subtract(new BigDecimal(0.005)).compareTo(new BigDecimal(0)) > 0) {
+                    if (CalcCore.percentageOfTip.subtract(new BigDecimal(0.005)).compareTo(new BigDecimal(0)) >= 0) {
+                    Log.v("pot before minus", format2digit(CalcCore.percentageOfTip));
                         CalcCore.percentageOfTip = CalcCore.percentageOfTip.subtract(new BigDecimal(0.005));
+                    Log.v("pot after minus", format2digit(CalcCore.percentageOfTip));
                     } else {
                         CalcCore.percentageOfTip = new BigDecimal(0);
                     }
                     et_percentage.setText(formatPercentage(CalcCore.percentageOfTip));
-                    calculate();
                 }
             });
 
@@ -188,34 +194,32 @@ public class TipCalcFragment extends Fragment {
                 public void onClick(View v) {
                     CalcCore.numberOfPeople = CalcCore.numberOfPeople.add(new BigDecimal(1));
                     et_number_of_people.setText(formatInteger(CalcCore.numberOfPeople));
-                    calculate();
                 }
             });
 
             btnPeopleMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (CalcCore.numberOfPeople.subtract(new BigDecimal(1)).compareTo(new BigDecimal(1)) > 0) {
+                    if (CalcCore.numberOfPeople.subtract(new BigDecimal(1)).compareTo(new BigDecimal(1)) >= 0) {
                         CalcCore.numberOfPeople = CalcCore.numberOfPeople.subtract(new BigDecimal(1));
                     } else {
-                        CalcCore.numberOfPeople = new BigDecimal(0);
+                        CalcCore.numberOfPeople = new BigDecimal(1);
                     }
                     et_number_of_people.setText(formatInteger(CalcCore.numberOfPeople));
-                    calculate();
                 }
             });
         }
 
-        String format2digit(BigDecimal price) {
-            return price.setScale(2, BigDecimal.ROUND_UP).toPlainString();
+        String format2digit(BigDecimal number) {
+            return new DecimalFormat("#.00").format(number);
         }
 
         String formatPercentage(BigDecimal percentage) {
-            return percentage.multiply(new BigDecimal(100)).setScale(1, BigDecimal.ROUND_UP).toPlainString();
+            return new DecimalFormat("#.0").format(percentage.multiply(new BigDecimal(100)));
         }
 
         String formatInteger(BigDecimal i) {
-            return i.setScale(0, BigDecimal.ROUND_UP).toPlainString();
+            return new DecimalFormat("#").format(i);
         }
 
         public void updateView() {
